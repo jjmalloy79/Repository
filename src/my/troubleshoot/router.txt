@@ -1,0 +1,7 @@
+
+Router:
+Check that router is plugged in to power supply.
+Check to make sure that all cables are securely fasten.
+Hook up a computer directly up to it and ping it.
+hiuguygl;kjho
+hello world
