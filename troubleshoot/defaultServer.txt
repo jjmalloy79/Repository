@@ -1,5 +1,0 @@
-
-Server:
-Check all physical connection to verify hooked up.
-Try pinging the server.
-Directly connect to the server with a different Ethernet cable and ping the server.

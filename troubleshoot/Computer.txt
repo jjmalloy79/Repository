@@ -1,9 +1,0 @@
-
-Computer  Wired:
-Check Ethernet cable and make sure it is connected on both sides securely.
-Check configurations to verify that they are correct. Open up terminal and type ipconfig.
-If configs are correct try pinging the next device in line such as a switch or router.
-Do this in terminal type ping -t 'insert ip address here with out quotes'.
-football
-timer
-area

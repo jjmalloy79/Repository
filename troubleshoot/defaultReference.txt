@@ -1,6 +1,0 @@
-
-References:
-Switches and Vlan:
-https://www.petri.com/troubleshoot-vlan-switch
-Wifi:
-http://searchnetworking.techtarget.com/tip/Wireless-network-troubleshooting-Connectivity
