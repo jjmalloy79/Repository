@@ -35,6 +35,7 @@ import javax.swing.text.Document;
 /**
  *
  * @author joshuamalloy from JoMa Interactive
+ * Senior Project
  * Network Connectivity Troubleshooting Series 0.17*/
 public class troubleshootUI extends javax.swing.JFrame {
     
