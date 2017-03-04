@@ -4,3 +4,4 @@ Physical Interface/Connectivity Issues:
 Interface is down/down – This means it’s not receiving keepalives and it’s not physically connected
 Interface is up/down – Meaning, it’s physically up but the Layer 2 protocol is down
 Interface is administratively down
+helper

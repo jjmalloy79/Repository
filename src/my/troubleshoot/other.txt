@@ -1,5 +1,4 @@
 
 Other:
 Make sure all connections are securely connected.
-Enter the text you want to write here.
-hot tomatoes
+Check all setting on the device to make sure that is properly configurated. 

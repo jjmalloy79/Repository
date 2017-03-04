@@ -1,11 +1,6 @@
 
 References:
-www.google.com
-microsoft.com
-Neal is here
-change the image in title.
-have help popup and be in another box.
-remove command button 
-realign everything
-write all the default txt files
-then change writeable txt files
+Switches and Vlan:
+https://www.petri.com/troubleshoot-vlan-switch
+Wifi:
+http://searchnetworking.techtarget.com/tip/Wireless-network-troubleshooting-Connectivity

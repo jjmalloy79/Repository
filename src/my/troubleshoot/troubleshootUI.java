@@ -2,7 +2,9 @@
 package my.troubleshoot;
 
 import static java.awt.AWTEventMulticaster.add;
+import java.awt.Color;
 import static java.awt.Color.WHITE;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -16,10 +18,14 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.text.Document;
 
@@ -68,7 +74,15 @@ public class troubleshootUI extends javax.swing.JFrame {
     private int counterC = 2;
     private int counterR = 2;
     private int countC = 3;
-    private int countR = 3; 
+    private int countR = 3;
+    
+    private int levelNumSwitch = 0;
+    private int levelNumOther = 0;
+    private int levelNumRouter = 0;
+    private int levelNumServer = 0;
+    private int levelNumComputer = 0;
+    private int levelNumWifi = 0;
+    
     private int computerSize = 0;
     private int routerSize = 0;
     private int serverSize = 0;
@@ -90,6 +104,7 @@ public class troubleshootUI extends javax.swing.JFrame {
     private final String serverShoot = "";
     private final String pcString = "";
     private final String routerString = "";
+    private String userLevel = "";
     private final String hlp = " Help Desk";
     private final String tech = " Tech Support";
     private final String admin = " Administration Support";
@@ -105,7 +120,18 @@ public class troubleshootUI extends javax.swing.JFrame {
     private final ArrayList<String> listS = new ArrayList<> ();
     private final ArrayList<String> listO = new ArrayList<> ();
     private final ArrayList<String> listW = new ArrayList<> ();
+    private final ArrayList<String> levelRef = new ArrayList<String> ();
+
+    private final List<String> levelSw = new ArrayList<>(Arrays.asList("Help Desk", "IT Support", "It Support", "Admin and Up Support"));
+    private final List<String> levelS = new ArrayList<>(Arrays.asList("Help Desk", "IT Support", "It Support", "Admin and Up Support"));
+    private final List<String> levelO = new ArrayList<>(Arrays.asList("Help Desk", "IT Support", "It Support", "Admin and Up Support"));
+    private final List<String> levelW = new ArrayList<>(Arrays.asList("Help Desk", "IT Support", "It Support", "Admin and Up Support"));    
+    private final List<String> levelpc = new ArrayList<>(Arrays.asList("Help Desk", "IT Support", "It Support", "Admin and Up Support"));
+    private final List<String> levelR = new ArrayList<>(Arrays.asList("Help Desk", "IT Support", "It Support", "Admin and Up Support"));
+    
     private final Font font = new Font("Courier", Font.BOLD,14);
+    //private FileInputStream instream = null;
+   // private FileOutputStream outstream = null;
     public troubleshootUI() {
        initComponents();
      
@@ -138,7 +164,7 @@ public class troubleshootUI extends javax.swing.JFrame {
         yesButton = new javax.swing.JButton();
         noButton = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
-        jToolBar1 = new javax.swing.JToolBar();
+        rulesTab = new javax.swing.JToolBar();
         Rules = new javax.swing.JButton();
         Switch = new javax.swing.JButton();
         Wifi = new javax.swing.JButton();
@@ -149,12 +175,14 @@ public class troubleshootUI extends javax.swing.JFrame {
         Training = new javax.swing.JButton();
         References = new javax.swing.JButton();
         help = new javax.swing.JButton();
-        level = new javax.swing.JLabel();
+        levelUp = new javax.swing.JLabel();
         jButton10 = new javax.swing.JButton();
+        addedLevel = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 204, 204));
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
+        setForeground(new java.awt.Color(0, 153, 153));
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Noteworthy", 3, 18)); // NOI18N
@@ -186,7 +214,7 @@ public class troubleshootUI extends javax.swing.JFrame {
         textArea1.setWrapStyleWord(true);
 
         question.setBackground(new java.awt.Color(0, 0, 0));
-        question.setFont(new java.awt.Font("Monospaced", 2, 12)); // NOI18N
+        question.setFont(new java.awt.Font("Monospaced", 2, 14)); // NOI18N
         question.setForeground(new java.awt.Color(255, 255, 255));
         question.setOpaque(true);
 
@@ -234,9 +262,10 @@ public class troubleshootUI extends javax.swing.JFrame {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        jToolBar1.setBackground(new java.awt.Color(153, 153, 153));
-        jToolBar1.setRollover(true);
-        jToolBar1.setFont(new java.awt.Font("Luminari", 3, 13)); // NOI18N
+        rulesTab.setBackground(new java.awt.Color(153, 153, 153));
+        rulesTab.setFloatable(false);
+        rulesTab.setRollover(true);
+        rulesTab.setFont(new java.awt.Font("Luminari", 3, 13)); // NOI18N
 
         Rules.setFont(new java.awt.Font("Luminari", 3, 11)); // NOI18N
         Rules.setText("Rules");
@@ -250,7 +279,7 @@ public class troubleshootUI extends javax.swing.JFrame {
                 RulesActionPerformed(evt);
             }
         });
-        jToolBar1.add(Rules);
+        rulesTab.add(Rules);
         Rules.getAccessibleContext().setAccessibleName("rulesTab");
 
         Switch.setFont(new java.awt.Font("Luminari", 3, 11)); // NOI18N
@@ -264,7 +293,7 @@ public class troubleshootUI extends javax.swing.JFrame {
                 SwitchActionPerformed(evt);
             }
         });
-        jToolBar1.add(Switch);
+        rulesTab.add(Switch);
         Switch.getAccessibleContext().setAccessibleName("switchTab");
 
         Wifi.setFont(new java.awt.Font("Luminari", 3, 11)); // NOI18N
@@ -278,7 +307,7 @@ public class troubleshootUI extends javax.swing.JFrame {
                 WifiActionPerformed(evt);
             }
         });
-        jToolBar1.add(Wifi);
+        rulesTab.add(Wifi);
         Wifi.getAccessibleContext().setAccessibleName("wifiTab");
 
         Wired.setFont(new java.awt.Font("Luminari", 3, 11)); // NOI18N
@@ -289,7 +318,7 @@ public class troubleshootUI extends javax.swing.JFrame {
                 WiredActionPerformed(evt);
             }
         });
-        jToolBar1.add(Wired);
+        rulesTab.add(Wired);
         Wired.getAccessibleContext().setAccessibleName("wiredTab");
 
         Router.setFont(new java.awt.Font("Luminari", 3, 11)); // NOI18N
@@ -303,7 +332,7 @@ public class troubleshootUI extends javax.swing.JFrame {
                 RouterActionPerformed(evt);
             }
         });
-        jToolBar1.add(Router);
+        rulesTab.add(Router);
         Router.getAccessibleContext().setAccessibleName("routerTab");
 
         Server.setFont(new java.awt.Font("Luminari", 3, 11)); // NOI18N
@@ -317,7 +346,7 @@ public class troubleshootUI extends javax.swing.JFrame {
                 ServerActionPerformed(evt);
             }
         });
-        jToolBar1.add(Server);
+        rulesTab.add(Server);
         Server.getAccessibleContext().setAccessibleName("serverTab");
 
         Other.setFont(new java.awt.Font("Luminari", 3, 11)); // NOI18N
@@ -334,7 +363,7 @@ public class troubleshootUI extends javax.swing.JFrame {
                 OtherActionPerformed(evt);
             }
         });
-        jToolBar1.add(Other);
+        rulesTab.add(Other);
         Other.getAccessibleContext().setAccessibleName("otherTab");
 
         Training.setFont(new java.awt.Font("Luminari", 3, 11)); // NOI18N
@@ -352,7 +381,7 @@ public class troubleshootUI extends javax.swing.JFrame {
                 TrainingActionPerformed(evt);
             }
         });
-        jToolBar1.add(Training);
+        rulesTab.add(Training);
         Training.getAccessibleContext().setAccessibleName("trainingTab");
 
         References.setFont(new java.awt.Font("Luminari", 3, 11)); // NOI18N
@@ -366,7 +395,7 @@ public class troubleshootUI extends javax.swing.JFrame {
                 ReferencesActionPerformed(evt);
             }
         });
-        jToolBar1.add(References);
+        rulesTab.add(References);
         References.getAccessibleContext().setAccessibleName("refTab");
 
         help.setFont(new java.awt.Font("Luminari", 3, 11)); // NOI18N
@@ -380,12 +409,12 @@ public class troubleshootUI extends javax.swing.JFrame {
                 helpActionPerformed(evt);
             }
         });
-        jToolBar1.add(help);
+        rulesTab.add(help);
 
-        level.setBackground(new java.awt.Color(0, 0, 0));
-        level.setFont(new java.awt.Font("Monospaced", 2, 12)); // NOI18N
-        level.setForeground(new java.awt.Color(255, 255, 255));
-        level.setOpaque(true);
+        levelUp.setBackground(new java.awt.Color(0, 0, 0));
+        levelUp.setFont(new java.awt.Font("Monospaced", 2, 12)); // NOI18N
+        levelUp.setForeground(new java.awt.Color(255, 255, 255));
+        levelUp.setOpaque(true);
 
         jButton10.setForeground(new java.awt.Color(0, 0, 255));
         jButton10.setText("Command");
@@ -395,80 +424,82 @@ public class troubleshootUI extends javax.swing.JFrame {
             }
         });
 
+        addedLevel.setEditable(false);
+        addedLevel.setBackground(new java.awt.Color(204, 204, 204));
+        addedLevel.setEnabled(false);
+        addedLevel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addedLevelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(level, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)
-                                .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26)
-                                .addComponent(yesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(noButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(33, 33, 33)
-                                .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(49, 49, 49)
-                                .addComponent(jButton10)
-                                .addGap(52, 52, 52)
-                                .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(46, 46, 46))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(question, javax.swing.GroupLayout.PREFERRED_SIZE, 924, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(textArea, javax.swing.GroupLayout.PREFERRED_SIZE, 924, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34))))
-            .addGroup(layout.createSequentialGroup()
                 .addGap(97, 97, 97)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 712, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(yesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(noButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
+                        .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton10)
+                        .addGap(18, 18, 18)
+                        .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(levelUp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(textArea, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(question, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(rulesTab, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(addedLevel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(level, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(saveButton)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(exitButton, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jButton10)
-                                .addComponent(resetButton)
-                                .addComponent(noButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(yesButton)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(levelUp, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(saveButton)
+                    .addComponent(yesButton)
+                    .addComponent(noButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(resetButton)
+                    .addComponent(jButton10)
+                    .addComponent(exitButton))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(55, 55, 55)
                         .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(question, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(addedLevel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(textArea, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27))))
+                        .addComponent(question, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(rulesTab, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(textArea, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
         jButton10.getAccessibleContext().setAccessibleName("cmdPrompt");
@@ -494,13 +525,12 @@ public class troubleshootUI extends javax.swing.JFrame {
     }//GEN-LAST:event_exitButtonButton
 // Add Button
     private void addButtonButton(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonButton
-System.out.println(switchs + " 493");
+
         add = true;
         reset = false;
         save = false;
-        addButton.setEnabled(false);
-        resetButton.setEnabled(false);
-        saveButton.setEnabled(true);
+       
+        
        if(rule || train)
        {
           question.setText(" Can not edit this section! ");
@@ -515,35 +545,38 @@ System.out.println(switchs + " 493");
     }//GEN-LAST:event_addButtonButton
 // Save Button
     private void saveButtonButton(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonButton
-System.out.println(switchs + " 514");
-        textArea1.setEditable(false);
+
         addButton.setEnabled(false);
         resetButton.setEnabled(false);
         saveButton.setEnabled(false);
         exitButton.setEnabled(true);
         question.setText(" Are you ready to save?");
         stringEnter = textArea1.getText();
+        userLevel = addedLevel.getText();
         save = true;
         add = false;
         reset = false;
-        if(switchs)
-        {
-            //saveSwitch = false;
-            theCounterC++;
-        }
+
         
 // TODO add your handling code here:
     }//GEN-LAST:event_saveButtonButton
 // yes button not done
     private void yesButton(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yesButton
 // if user fines what they are looking for
+        no = false;
         if(!add && !train && !rule && !save && !reset && !references)
             question.setText(" Glad to be helpful.");  
-   if(add)
-         {
+/***********This is when the user is adding something***/   
+        if(add)
+        {
 // This allows user to type in textArea
-            textArea1.setEditable(true);
-
+        addButton.setEnabled(false);
+        resetButton.setEnabled(false);
+        saveButton.setEnabled(true);
+        addedLevel.setEnabled(true);
+        textArea1.setEditable(true);
+        addedLevel.setEditable(true);
+        addedLevel.setBackground(new java.awt.Color(255,255,255));
     /***********************Reads in wired Computer information*******************/    
             if(computer)
                {
@@ -553,9 +586,9 @@ System.out.println(switchs + " 514");
 
                     else
                         theCounterC = computerSize;
-               }
+               } // ends computer if
     /***********************Reads in Wifi information*******************/    
-            else if(wifi)
+            if(wifi)
             {
                 readIn("wifi.txt");
                 if(theCounterW<= wifiSize)
@@ -565,7 +598,7 @@ System.out.println(switchs + " 514");
                     theCounterW = wifiSize;
             }
     /***********************Reads in Router information*******************/  
-            else if(router)
+            if(router)
                {   
                     readIn("router.txt");
                     if(theCounterR <= routerSize)
@@ -575,7 +608,7 @@ System.out.println(switchs + " 514");
                         theCounterR = routerSize;
                }
     /***********************Reads in Switch information*******************/  
-            else if(switchs)
+               if(switchs)
                {
                     readIn("switch.txt");
                                 
@@ -586,7 +619,7 @@ System.out.println(switchs + " 514");
                         theCounterSw = switchSize;
                }
     /***********************Reads in Server information*******************/  
-            else if(server)
+           if(server)
                {
                     readIn("server.txt");
                     if(theCounterS <= serverSize)
@@ -596,7 +629,7 @@ System.out.println(switchs + " 514");
                         theCounterS = serverSize;
                }
     /***********************Reads in Other information*******************/  
-            else if(other)
+           if(other)
                {
                     readIn("other.txt");
                     if(theCounterO <= otherSize)
@@ -606,7 +639,7 @@ System.out.println(switchs + " 514");
                         theCounterO = otherSize;
                }
     /***********************Reads in References information*******************/  
-            else if(references)
+           if(references)
                {
                     readIn("references.txt");
                     if(theCounterRef <= referenceSize)
@@ -615,12 +648,17 @@ System.out.println(switchs + " 514");
                     else
                         theCounterRef = referenceSize;
                }
-/************************Tells user what to do to ***************************/
-           question.setText(" Type in the area below to add dont hit enter unless adding more than one step."); 
-                   
 
+/************************Tells user what to do to ***************************/
+         String input;
+            
+            input = " Type in the area below to add dont hit enter unless adding more than one step." ;
+            input = input + "In box above add the level Help desk, IT, Admin and Up for level.";
+            question.setFont(new java.awt.Font("Monospaced", 2, 10));
+            question.setText(input);
          }
- /*************************If users is saving file************************/        
+/***********************End of the adding section*/ 
+/*************************If users is saving file************************/        
          if(save)
          {
 /*************************Resting textArea to not editable question to nothing and save to be disabled**/
@@ -639,101 +677,28 @@ System.out.println(switchs + " 514");
              if(computer)
                 saveWired = true;
 /************************This calls add to file which adds the text to the file*****/
-             if(!reset)
-             {
+
                 try
                 {
                     addToFile();
-System.out.println(switchs + "643");
                 } 
                 catch (IOException ex)
                 {
                     Logger.getLogger(troubleshootUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
-             } // ends if
+             
          }// ends save
 /**************************This calls reset if user wants to set back to default settings ****/
 
-    if(reset)
-    {
-/******************************Rests Switch file***************/
-        if(switchs)
+        if(reset)
         {
-             readIn("switch.txt");
- System.out.println("save me 653");   
-            //FileInputStream instream = null;
-            /*FileOutputStream outstream = null;
-            try
-            {
-                File infile = new File("defaultSwitch.txt");
-                File outFile = new File("switch.txt");
-
-                instream = new FileInputStream(infile);
-                outstream = new FileOutputStream(outFile);
-
-                byte [] buffer = new byte [1024];
-                int length;
-
-                while( (length = instream.read(buffer)) > 0) 
-                {
-                    outstream.write(buffer, 0, length);
-                }// ends while
-                instream.close();
-                outstream.close();             
-            }// ends try
-            catch(IOException ioe)
-            {
-            }// ends catch  */
-           // source = new File("defaultSwitch.txt");
-            //dest = new File("switch.txt");
-            try (FileReader fr = new FileReader("defaultSwitch.txt");
-            FileWriter fw = new FileWriter("switch.txt");) {
-            int c = fr.read();
-            while(c!=-1) {
-                fw.write(c);
-                c = fr.read();
+            try {
+                Reset();
+            } catch (IOException ex) {
+                Logger.getLogger(troubleshootUI.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
 
-
-           
-        }//ends if
-
-/********************Ends the Switch********************/
-/******************************Rests wifi file***************/
-        if(wifi)
-        {
-            FileInputStream instream = null;
-            FileOutputStream outstream = null;
-            try
-            {
-                File infile = new File("defaultWifi.txt");
-                File outFile = new File("wifi.txt");
-
-                instream = new FileInputStream(infile);
-                outstream = new FileOutputStream(outFile);
-
-                byte [] buffer = new byte [1024];
-                int length;
-
-                while( (length = instream.read(buffer)) > 0) 
-                {
-                    outstream.write(buffer, 0, length);
-                }// ends while
-                instream.close();
-                outstream.close();             
-            }// ends try
-            catch(IOException ioe)
-            {
-            }// ends catch  
-            readIn("wifi.txt");
-        }//ends wifi
-/********************Ends the wifi********************/
-          
-
-    }// ends loop
+        } // reset
 
         if(save)
         {
@@ -744,7 +709,20 @@ System.out.println(switchs + "643");
         }
         if(reset)
         {
-            readIn("switch.txt");
+            if(switchs)
+                readIn("switch.txt");
+            if(wifi)
+                readIn("wifi.txt");
+            if(other)
+                readIn("other.txt");
+            if(computer)
+                readIn("computer.txt");
+            if(references)
+                readIn("references.txt");
+            if(router)
+                readIn("router.txt");
+            if(server)
+                readIn("server.txt");            
             addButton.setEnabled(true);
             saveButton.setEnabled(false);
             resetButton.setEnabled(true);
@@ -755,33 +733,45 @@ System.out.println(switchs + "643");
     private void noButton(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noButton
     // Variables ==================================
         no = true;   
-        autoDisplay = false;     
+        autoDisplay = false;  
+    if(reset)
+    {
+        addButton.setEnabled(true);
+        saveButton.setEnabled(false);
+        resetButton.setEnabled(true);
+        reset = false;
+    }
 /***********************Computer*******************/    
     if(computer && !computerEnd)
        {
-            if(theCounterC < computerSize)
+           readIn("Computer.txt");
+            if(theCounterC <= computerSize)
                 theCounterC++;
             else
                 theCounterC = computerSize;
+            levelNumComputer++;
             readIn("Computer.txt");
        }
 /***********************Computer*******************/    
     if(wifi && !wifiEnd)
        {
-   
-            if(theCounterW < wifiSize)
+            readIn("wifi.txt");
+            if(theCounterW <= wifiSize)
                 theCounterW++;
             else
                 theCounterW = wifiSize;
+            levelNumWifi++;
             readIn("wifi.txt");
        }
 /***********************Router*******************/  
-       if(router && !routerEnd)
+    if(router && !routerEnd)
        {   
-            if(theCounterR < routerSize)
+           readIn("router.txt");
+            if(theCounterR <= routerSize)
                 theCounterR++;
             else
                 theCounterR = routerSize;
+            levelNumRouter++;
             readIn("router.txt");
        }
 /***********************Switch*******************/  
@@ -790,26 +780,31 @@ System.out.println(switchs + "643");
             readIn("switch.txt");
             if(theCounterSw <= switchSize)
                 theCounterSw++;
-
             else
                 theCounterSw = switchSize;
+            levelNumSwitch++;
+            readIn("switch.txt");
        }
 /***********************Server*******************/  
-       if(server && !serverEnd)
+    if(server && !serverEnd)
        {
-            if(theCounterS < serverSize)
+           readIn("server.txt");
+            if(theCounterS <= serverSize)
                 theCounterS++;
             else
                 theCounterS = serverSize;
+            levelNumServer++;
             readIn("server.txt");
        }
 /***********************Other*******************/  
-       if(other && !serverEnd)
+    else if(other && !otherEnd)
        {
-            if(theCounterO < otherSize)
+           readIn("other.txt");
+            if(theCounterO <= otherSize)
                 theCounterO++;
             else
                 theCounterO = otherSize;
+            levelNumOther++;
             readIn("other.txt");
        }
 
@@ -859,8 +854,9 @@ System.out.println(switchs + "643");
        this.wifi = false;
        this.train = false;
        this.references = false;
+       //RulesActionPerformed.setBackground(Color.BLUE);
        question.setText("");
-       level.setText("");
+       levelUp.setText("");
        textArea1.setText("");
        textArea1.setText("\nRules:\n" 
                          + "\nHow many people will be effected by change?\n"
@@ -976,14 +972,15 @@ System.out.println(switchs + "643");
         this.train = false;
         this.references = true;
         question.setText("");
-        level.setText("");
+        levelUp.setText("");
         readIn("references.txt");
         
     }//GEN-LAST:event_ReferencesActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
 
-        new helpDesk().setVisible(true);
+            // TODO Auto-generated catch block
+        
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void helpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpActionPerformed
@@ -996,11 +993,15 @@ System.out.println(switchs + "643");
        this.wifi = false;
        this.train = false;
        this.references = false;
-       level.setText("");
+       levelUp.setText("");
        question.setText(" ");
        
 
     }//GEN-LAST:event_helpActionPerformed
+
+    private void addedLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addedLevelActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addedLevelActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1020,9 +1021,8 @@ System.out.println(switchs + "643");
  // This Section reads in whatever file that the user is looking at 
     private void readIn(String filename)
     {
-  System.out.println(add + " 1004");
 /**************Variables ****************/
-       //ArrayList <String> listComputer = new ArrayList <String> (); 
+
        textArea1.setText("");    
        String input = "";
        String textFieldReadable = "";
@@ -1034,6 +1034,16 @@ System.out.println(switchs + "643");
        switchSize = 0;
        wifiSize = 0;
        referenceSize = 0;
+       listSw.clear();
+       listW.clear();
+       listO.clear();
+       listR.clear();
+       listRef.clear();
+       listS.clear();
+       listpc.clear();
+      // if(switchs)
+           // levelUp.setText(levelSw.get(levelNumSwitch));
+
 /***************Try to catch the file trying to open**************/
        try {
             FileReader fileReader = new FileReader(new File(filename).getAbsolutePath());
@@ -1053,7 +1063,9 @@ System.out.println(switchs + "643");
                     if(server)
                         listS.add(tfr);
                     if(switchs)
+                    {
                         listSw.add(tfr);
+                    }
                     if(other)
                         listO.add(tfr);
                     if(wifi)
@@ -1094,474 +1106,354 @@ System.out.println(switchs + "643");
        {
          printOut();
        }
-       //else
-       //   question.setText(" Do you want to save? ");
-    }
+
+       
+    }//ends ReadIn
  
     
     /******************************This adds new data to files*/
     private void addToFile() throws IOException
     {   
       String temp = "";
- /*************************writes to Computer.txt*********/
-        if(computer)
-        {   
-            FileWriter writer = new FileWriter("Computer.txt"); 
-            for(int j = 0; j < computerSize -1; j ++)
+       int sizeOf = 0;
+      String nameOfFile = "";
+      /********* This puts data into variables depending on which Section the users is in.***/
+            if(computer)
             {
-                    if( j < computerSize)
-                    {
-                         temp = listpc.get(j);
-                         writer.write("\n" + temp);
-                    }
+                sizeOf = computerSize - 1;
+                nameOfFile = "Computer.txt";
             }
-           
-            writer.write("\n" + stringEnter);      
-            writer.close();
-            listpc.clear();
-            readIn("Computer.txt");
-        }
-/****************************writes to wifi.txt*********/
-        else if(wifi)
-        {
-            FileWriter writer = new FileWriter("wifi.txt"); 
-            for(int j = 0; j < wifiSize -1; j ++)
+            if(switchs)
             {
-                    if( j < wifiSize)
-                    {
-                         temp = listW.get(j);
-                         writer.write("\n" + temp);
-                    }
+                sizeOf = switchSize - 1;
+                nameOfFile = "switch.txt";
             }
-           
-            writer.write("\n" + stringEnter);      
-            writer.close();
-            listW.clear();
-            readIn("wifi.txt");
-        }  
-/****************************writes to router.txt*********/
-        else if(router)
-        {
-            FileWriter writer = new FileWriter("router.txt"); 
-            for(int j = 0; j < routerSize -1; j ++)
+             if(wifi)
             {
-                    if( j < routerSize)
-                    {
-                         temp = listR.get(j);
-                         writer.write("\n" + temp);
-                    }
+                sizeOf = wifiSize - 1;
+                nameOfFile = "wifi.txt";
             }
-           
-            writer.write("\n" + stringEnter);      
-            writer.close();
-            listR.clear();
-            readIn("router.txt");
-        }  
-/****************************writes to switch.txt*********/
-        if(switchs)
-        {
-            int num = switchSize - 1;
+            if(router)
+            {
+                sizeOf = routerSize - 1;
+                nameOfFile = "router.txt";
+            }
+            if(server)
+            {
+                sizeOf = serverSize - 1;
+                nameOfFile = "server.txt";
+            }
+             if(other)
+            {
+                sizeOf = otherSize - 1;
+                nameOfFile = "other.txt";
+            }
+            if(references)
+            {
+                sizeOf = referenceSize - 1;
+                nameOfFile = "references.txt";
+            }
 
-            FileWriter writer = new FileWriter("switch.txt"); 
-            for(int j = 0; j < num; j ++)
+/**********************This writes to that file**********************/
+            FileWriter writer = new FileWriter(nameOfFile); 
+            for(int j = 0; j < sizeOf; j ++)
             {
-                    if( j < switchSize)
+                    if( j < sizeOf)
                     {
-                         temp = listSw.get(j);
+/***********************This puts the data into the right file.******/
+                        if(computer)
+                            temp = listpc.get(j);
+                        if(switchs)
+                            temp = listSw.get(j);
+                        if(wifi)
+                            temp = listW.get(j);
+                        if(router)
+                            temp = listR.get(j);
+                        if(other)
+                            temp = listO.get(j);
+                        if(server)
+                            temp = listS.get(j);
+                        if(references)
+                            temp = listRef.get(j);
                          writer.write("\n" + temp);
                     }
             }
            
             writer.write("\n" + stringEnter);      
             writer.close();
-            listSw.clear();
-            readIn("switch.txt");
-
-        }
-/****************************writes to other.txt*********/
-        else if(other)
-        {
-            FileWriter writer = new FileWriter("other.txt"); 
-            for(int j = 0; j < otherSize -1; j ++)
+/**********************This clears only the list that is being read in by the text.***/
+            if (computer)
             {
-                    if( j < otherSize)
-                    {
-                         temp = listO.get(j);
-                         writer.write("\n" + temp);
-                    }
+                listpc.clear();
+                readIn("Computer.txt");
             }
-           
-            writer.write("\n" + stringEnter);      
-            writer.close();
-            listO.clear();
-            readIn("other.txt");
-        } 
-/****************************writes to server.txt*********/
-        else if(server)
-        {
-            FileWriter writer = new FileWriter("server.txt"); 
-            for(int j = 0; j < serverSize -1; j ++)
+            if (switchs)
             {
-                    if( j < serverSize)
-                    {
-                         temp = listS.get(j);
-                         writer.write("\n" + temp);
-                    }
+                listSw.clear();
+                readIn("switch.txt");
             }
-           
-            writer.write("\n" + stringEnter);      
-            writer.close();
-            listS.clear();
-            readIn("server.txt");           
-        } 
- /*************************writes to References.txt*********/
-        else if(references)
-        {
-            FileWriter writer = new FileWriter("references.txt"); 
-            for(int j = 0; j < referenceSize -1; j ++)
+             if (wifi)
             {
-                    if( j < referenceSize)
-                    {
-                         temp = listRef.get(j);
-                         writer.write("\n" + temp);
-                    }
+                listW.clear();
+                readIn("wifi.txt");
             }
-           
-            writer.write("\n" + stringEnter);      
-            writer.close();
-            listRef.clear();
-            readIn("references.txt");
+            if (server)
+            {
+                listS.clear();
+                readIn("server.txt");
+            }   
+            if (router)
+            {
+                listR.clear();
+                readIn("router.txt");
+            }
+            if (other)
+            {
+                listO.clear();
+                readIn("other.txt");
+            }
+              if (references)
+            {
+                listRef.clear();
+                readIn("references.txt");
+            }    
  
-        }    
         stringEnter = "";
     }
  /********************************Prints to text area**********/
     private void printOut()
     {     
 /******************Variables*************************************/
-        int size = 0; 
+        //int size = 0; 
         boolean noMore = false;
         int printCount = 0;
-
+        int listSize = 0;
+        String tempData = "";
+        boolean saving = false;
         text = "";
-        if(computer)
-        {
-            size = computerSize;
-            printCount = theCounterC;  
-        }
-        if(router)
-        {
-            size = routerSize;
-            printCount = theCounterR;         
-        }
         if(switchs)
         {
-            size = switchSize;
+            listSize = listSw.size();
+            saving = saveSwitch;
             printCount = theCounterSw; 
-            
-        }    
-        if(other)
-        {
-            size = otherSize;
-            printCount = theCounterO;
-           
+ System.out.println("i");
         }
-        if(server)
+        if(computer)
         {
-            size = serverSize;
-            printCount = theCounterS;         
+            listSize = listpc.size();
+            saving = saveWired;
+            printCount = theCounterC; 
         }
         if(wifi)
         {
-            size = wifiSize;
-            printCount = theCounterW;         
+            listSize = listW.size();
+            saving = saveWifi;
+            printCount = theCounterW; 
+        }
+        if(router)
+        {
+            listSize = listR.size();
+            saving = saveRouter;
+            printCount = theCounterR; 
+        }
+        if(other)
+        {
+            listSize = listO.size();
+            saving = saveOther;
+            printCount = theCounterO; 
+        }
+        if(server)
+        {
+            listSize = listS.size();
+            saving = saveServer;
+            printCount = theCounterS; 
         }
         if(references)
         {
-            size = referenceSize;
-            printCount = theCounterRef;         
+            listSize = listS.size();
+            saving = saveServer;
+            printCount = theCounterRef; 
         }
-        if(printCount <= size )
-        {
-            if(printCount == size)
+        if(printCount == listSize)
             {
                 printCount--;
                 noMore = true;
-            }
- 
- //************************Displays Computer wired ****************************
-              if(computer)
-              {
-                for(int i = 0; i < listpc.size(); i ++){
-                    if(printCount > i)    
-                    {
-             
-                      if(i < 1)
-                        text = text + "\n" + listpc.get(i) + "\n";  
-                      else
-                        text = text + "\n" + (i) +") " + listpc.get(i) + "\n"; 
-
-                      if(!saveWired)  
-                       {
-                          if(printCount > i)
-                              question.setText(" Did Step " + (i) + " work?");
-
-                          if(noMore)
-                          {
-                              question.setText(" I used all my resources.");
-                              computerEnd = true;
-                          }
-                       }   
-
-                      if(saveWired)
-                      {
-                         if(save)
-                            question.setText(" Your file was saved!");
-                         else
-                             question.setText(" All resources used up!");
-                         level.setText( "");
-                      }   
-                     }
-                   
-                textArea1.setText(text);
-                }// ends for loop
-              }
-//************************ End Of Computer **************************** 
- //************************Displays Computer wifi ****************************
-              if(wifi)
-              {
-                  for(int i = 0; i < listW.size(); i++){
-                      if(printCount > i)
-                      {
-                          
-                          if(i < 1)
-                              text = text + "\n" + listW.get(i) + "\n";
-                          else
-                              text = text + "\n" + (i) +") " + listW.get(i) + "\n";
-                          
-                          if(!saveWifi)
-                          {
-                              if(printCount > i)
-                                  question.setText(" Did Step " + (i) + " work?");
-                              
-                              if(noMore)
-                              {
-                                  question.setText(" I used all my resources.");
-                                  switchsEnd = true;
-                              }
-                          }
-                          
-                          if(saveWifi)
-                          {
-                              if(save)
-                                  question.setText(" Your file was saved!");
-                              else
-                                  question.setText(" All resources used up!");
-                              level.setText( "");
-                          }
-                      }
-                  }
-                  textArea1.setText(text);
-            }
-//************************ End Of Computer wifi **************************** 
-//************************Displays Router****************************
-              if(router)
-              {
-                for(int i = 0; i < listR.size(); i ++){
-                    if(printCount > i)    
-                    {
-             
-                      if(i < 1)
-                        text = text + "\n" + listR.get(i) + "\n";  
-                      else
-                        text = text + "\n" + (i) +") " + listR.get(i) + "\n"; 
-
-                      if(!saveRouter)  
-                       {
-                          if(printCount > i)
-                              question.setText(" Did Step " + (i) + " work?");
-
-                          if(noMore)
-                          {
-                              question.setText(" I used all my resources.");
-                              routerEnd = true;
-                          }
-                       }   
-
-                      if(saveRouter)
-                      {
-                         if(save)
-                            question.setText(" Your file was saved!");
-                         else
-                             question.setText(" All resources used up!");
-                         level.setText( "");
-                      }   
-                     }
-                   
-                textArea1.setText(text);
-                }// ends for loop
-              }
-//**********************End Of Router*********************************
-//************************Displays switches ****************************
- System.out.println(cout + " Display in printout 1389");
-              if(switchs)
-              {
-cout++;
-                for(int i = 0; i < listSw.size(); i++){
-                    if(printCount > i)    
-                    {
-             
-                      if(i < 1)
-                        text = text + "\n" + listSw.get(i) + "\n";  
-                      else
-                        text = text + "\n" + (i) +") " + listSw.get(i) + "\n"; 
-
-                      if(!saveSwitch)  
-                       {
-                          if(printCount > i)
-                              question.setText(" Did Step " + (i) + " work?");
-
-                          if(noMore)
-                          {
-                              question.setText(" I used all my resources.");
-                              switchsEnd = true;
-                          }
-                       }   
-
-                      if(saveSwitch)
-                      {
-                         if(save)
-                            question.setText(" Your file was saved!");
-                         else
-                             question.setText(" All resources used up!");
-                         level.setText( "");
-                      }   
-                     }
-                   }
-                textArea1.setText(text);
-              }
-//************************End Switchesr****************************
-//************************Displays Others****************************
-              if(other)
-              {
-                for(int i = 0; i < listO.size(); i ++){
-                    if(printCount > i)    
-                    {
-             
-                      if(i < 1)
-                        text = text + "\n" + listO.get(i) + "\n";  
-                      else
-                        text = text + "\n" + (i) +") " + listO.get(i) + "\n"; 
-
-                      if(!saveOther)  
-                       {
-                          if(printCount > i)
-                              question.setText(" Did Step " + (i) + " work?");
-
-                          if(noMore)
-                          {
-                              question.setText(" I used all my resources.");
-                              otherEnd = true;
-                          }
-                       }   
-
-                      if(saveOther)
-                      {
-                         if(save)
-                            question.setText(" Your file was saved!");
-                         else
-                             question.setText(" All resources used up!");
-                         level.setText( "");
-                      }   
-                     }
-                   
-                textArea1.setText(text);
-                }// ends loop
-              }
-//************************End of Others****************************
-//************************Displays Servers****************************
-              if(server)
-              {
-                for(int i = 0; i < listS.size(); i ++){
-                    if(i < 1)                
-                      text = text + "\n" + listS.get(i) + "\n";  
-                    else
-                      text = text + "\n" + (i) +") " + listS.get(i) + "\n"; 
-
-                    if(!saveServer)  
-                     {                   
-                        if(printCount > i)
-                            question.setText(" Did Step " + (i) + " work?");
-                        if(noMore)
-                        {
-                            question.setText(" I used all my resources.");
-                            serverEnd = true;
-                        }
-                     }
-                     if(saveServer)
-                     {
-                         if(save)
-                            question.setText(" Your file was saved!");
-                         else
-                             question.setText(" All resources used up!");
-                         level.setText( "");
-                     }
-                }// ends loop
-              }// ends server
-//************************End of Servers****************************
-
-//************************Displays References****************************
-          if(references)  
-          {
-                for(int i = 0; i < listRef.size(); i ++)
+            }// ends if
+               
+                for(int i = 0; i < listSize; i ++)
                 {
-                  text = "";
-                for(int j = 0; j < referenceSize -1; j ++)
-                  {
-                      text = text + listRef.get(j) + "\n";     
-                  }
-            }
-          }// ends loop
-                  textArea1.setText(text);
+                    if(printCount > i)    
+                    {
+/*******************************This puts what is in the list into a temp***/             
+                        if(computer)
+                            tempData = listpc.get(i);
+                        if(switchs)
+                            tempData = listSw.get(i);
+                        if(wifi)
+                            tempData = listW.get(i);
+                        if(other)
+                            tempData = listO.get(i);
+                        if(server)
+                            tempData = listS.get(i);
+                        if(router)
+                            tempData = listR.get(i);
+                        if(references)
+                            tempData = listRef.get(i);
+                        if(i < 1)
+                            text = text + "\n" + tempData + "\n";  
+                        else
+                            text = text + "\n" + (i) +") " + tempData + "\n"; 
 
-              if(noMore && references)
-              {
-               question.setText("");
-              }               
-          
-          
-//************************End of References****************************/
-            
-        }
+                      if(!saving)  
+                       {
+                          if(printCount > i)
+                              question.setText(" Did Step " + (i) + " work?");
+
+                          if(noMore)
+                          {
+                              question.setText(" I used all my resources.");
+                              if(computer)
+                                    computerEnd = true;
+                              if(wifi)
+                                    wifiEnd = true;
+                              if(switchs)
+                                    switchsEnd = true;
+                              if(router)
+                                    routerEnd = true;
+                              if(server)
+                                    serverEnd = true;
+                              if(other)
+                                    otherEnd = true;
+                              //if(references)
+                                 //   referencesEnd = true;
+                          }// ends if
+                       }   // ends if
+
+                      if(saving)
+                      {
+                         if(save)
+                            question.setText(" Your file was saved!");
+                         else
+                             question.setText(" All resources used up!");
+                       
+                      }   
+                   }
+                   
+                textArea1.setText(text);
+                }// ends for loop 
+     
+//************************displays which level should be involved****************************/ 
+        if(switchs && levelNumSwitch < levelSw.size())
+            levelUp.setText(levelSw.get(levelNumSwitch));
+        if(other && levelNumOther < levelO.size())
+            levelUp.setText(levelO.get(levelNumOther));
+        if(router && levelNumRouter < levelR.size())
+            levelUp.setText(levelR.get(levelNumRouter));
+        if(server && levelNumServer < levelS.size())
+            levelUp.setText(levelO.get(levelNumOther));
+        if(wifi && levelNumWifi < levelW.size())
+            levelUp.setText(levelW.get(levelNumWifi));
+        if(computer && levelNumComputer < levelpc.size())
+            levelUp.setText(levelpc.get(levelNumComputer));
+        textArea1.setText(text);
     }
     /*This is the Reset Section that puts everything back to default */
-        private void Reset() throws FileNotFoundException, IOException
+    private void Reset() throws FileNotFoundException, IOException
+    {
+        FileInputStream instream = null;
+        FileOutputStream outstream = null;
+        String inFileName = "";
+        String outFileName="";
+System.out.println("reset1367");
+        if(computer)
         {
-            FileInputStream instream = null;
-            FileOutputStream outstream = null;
-            
-            if(switchs)
-            {
-                try{
-                    File infile = new File("defaultSwitch.txt");
-                    File outFile = new File("switch.txt");
-                    
-                    instream = new FileInputStream(infile);
-                    outstream = new FileOutputStream(outFile);
-                    
-                    byte [] buffer = new byte [1024];
-                    int length;
-                    
-                    while( (length = instream.read(buffer)) > 0) {
-                        outstream.write(buffer, 0, length);
-                    }
-                    instream.close();
-                    outstream.close();             
-                }catch(IOException ioe){
-                }
-
-            }
+            outFileName = "computer.txt";
+            inFileName = "defaultComputer.txt";
         }
+        if(wifi)
+        {
+            outFileName = "wifi.txt";
+            inFileName = "defaultWifi.txt";
+        }
+        if(switchs)
+        {
+            outFileName = "switch.txt";
+            inFileName = "defaultSwitch.txt";
+        }
+        if(router)
+        {
+            outFileName = "router.txt";
+            inFileName = "defaultRouter.txt";
+        }
+        if(server)
+        {
+            outFileName = "server.txt";
+            inFileName = "defaultServer.txt";
+        }
+        if(other)
+        {
+            outFileName = "other.txt";
+            inFileName = "defaultOther.txt";
+        }
+        if(references)
+        {
+            outFileName = "references.txt";
+            inFileName = "defaultReferences.txt";
+        }
+
+                    try{
+   
+                        File infile = new File(inFileName);
+                        File outFile = new File(outFileName);
+
+                        instream = new FileInputStream(infile);
+                        outstream = new FileOutputStream(outFile);
+
+                        byte [] buffer = new byte [1024];
+                        int length;
+
+                        while( (length = instream.read(buffer)) > 0) {
+                            outstream.write(buffer, 0, length);
+
+                        }
+                        instream.close();
+                        outstream.close();             
+                    } // ends try
+                    catch(IOException ioe)
+                    {
+                        
+                    }// ends catch
+
+/***********This Section calls readIn to redisplay sections*******/
+        if(switchs)
+        {
+            readIn("switch.txt");
+        }// ends if
+        if(other)
+        {
+            readIn("other.txt");
+        }// ends if
+        if(computer)
+        {
+            readIn("computer.txt");
+        }// ends if
+        if(wifi)
+        {
+            readIn("wifi.txt");
+        }// ends if
+        if(server)
+        {
+            readIn("server.txt");
+        }// ends if
+        if(references)
+        {
+            readIn("references.txt");
+        }// ends if
+        if(router)
+        {
+            readIn("router.txt");
+        }// ends if
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Other;
@@ -1574,6 +1466,7 @@ cout++;
     private javax.swing.JButton Wifi;
     private javax.swing.JButton Wired;
     private javax.swing.JButton addButton;
+    private javax.swing.JTextField addedLevel;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
@@ -1586,11 +1479,11 @@ cout++;
     private javax.swing.JButton jButton10;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JLabel level;
+    private javax.swing.JLabel levelUp;
     private javax.swing.JButton noButton;
     private javax.swing.JLabel question;
     private javax.swing.JButton resetButton;
+    private javax.swing.JToolBar rulesTab;
     private javax.swing.JButton saveButton;
     private javax.swing.JScrollPane textArea;
     private javax.swing.JTextArea textArea1;
